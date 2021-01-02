@@ -1,6 +1,7 @@
 pragma solidity ^0.7.4;
 
-contract AllowaDraw {
+
+contract AllowaDraw  {
     
     address payable owner;
     
@@ -8,6 +9,7 @@ contract AllowaDraw {
     
     constructor() {
         owner = msg.sender;
+        Allowance[owner] = 100 ether;
     }
     
     function getBalance() public view returns(uint) {
@@ -19,15 +21,19 @@ contract AllowaDraw {
     }
     
     function giveAllowance(address payable _to, uint _amount) public {
-        require(msg.sender == owner, "You are not the owner");
-        assert((address(this).balance - _amount) <= address(this).balance);
-        assert((Allowance[_to] + _amount) >= Allowance[_to]);
-        address(this).balance - _amount;
-        Allowance[_to] + _amount;
+        // require(msg.sender == owner, "You are not the owner");
+        // assert((Allowance[msg.sender] - _amount) <= Allowance[msg.sender]);
+        // assert((Allowance[_to] + _amount) >= Allowance[_to]);
+        // address(this).getBalance() -= _amount;
+        // Allowance[_to] += _amount;
     }
     
     function witdrawMoney(address payable _to, uint _amount) public {
         
+    }
+    
+    fallback() external {
+        depositMoney();
     }
     
 }
