@@ -7,6 +7,7 @@ contract AllowaDraw  {
     
     mapping(address => uint) public Allowance;
     
+    // contructor to create owner and genesis tokens
     constructor() {
         owner = msg.sender;
         Allowance[owner] = 100 ether;
@@ -16,6 +17,7 @@ contract AllowaDraw  {
       return address(this).balance;
     }
     
+
     function depositMoney() public payable {
         
     }
