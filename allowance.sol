@@ -7,34 +7,38 @@ contract AllowaDraw  {
     
     mapping(address => uint) public Allowance;
     
-    // contructor to create owner and genesis tokens
     constructor() {
         owner = msg.sender;
-        Allowance[owner] = 100 ether;
+        // Allowance[owner] = 100 ether;
+    }
+    
+    modifier onlyOwner() {
+        require(owner == msg.sender, "You are not allowed!");
+        _;
     }
     
     function getBalance() public view returns(uint) {
       return address(this).balance;
     }
     
-
     function depositMoney() public payable {
         
     }
     
-    function giveAllowance(address payable _to, uint _amount) public {
-        // require(msg.sender == owner, "You are not the owner");
+    // function giveAllowance(address payable _to, uint _amount) public {
+        
         // assert((Allowance[msg.sender] - _amount) <= Allowance[msg.sender]);
         // assert((Allowance[_to] + _amount) >= Allowance[_to]);
         // address(this).getBalance() -= _amount;
         // Allowance[_to] += _amount;
-    }
-    
-    function witdrawMoney(address payable _to, uint _amount) public {
         
+    // }
+    
+    function witdrawMoney(address payable _to, uint _amount) public onlyOwner{
+        _to.transfer(_amount);
     }
     
-    fallback() external {
+    fallback() external payable {
         depositMoney();
     }
     
