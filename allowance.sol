@@ -8,7 +8,9 @@ contract AllowaDraw is Ownable {
     
     constructor() {
         owner = msg.sender;
+         allowance[owner] = 1000;
     }
+    
     mapping(address => uint) public allowance;
     
      modifier ownerOrAllowed(uint _amount) {
