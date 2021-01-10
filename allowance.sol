@@ -4,6 +4,8 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/access/
 
 contract AllowanceContract is Ownable {
     
+    event AllowanceChanged(address indexed _forWho, address indexed _fromwhom, uint _oldAmount, uint _newAmount);
+    
     mapping(address => uint) public allowance;
     
     address ownerallow;
@@ -22,11 +24,13 @@ contract AllowanceContract is Ownable {
     }
     
      function giveAllowance(address _who, uint _amount) public onlyOwner {
+         emit AllowanceChanged(_who,msg.sender,allowance[_who], _amount);
         allowance[_who] = _amount;
         
     }
     
    function reduceAllowance(address _who, uint _amount) internal {
+       emit AllowanceChanged(_who,msg.sender,allowance[_who], allowance[_who] - _amount);
        allowance[_who] -= _amount;
    }
 }
