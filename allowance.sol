@@ -1,30 +1,28 @@
 pragma solidity ^0.7.4;
 
-import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
+import "https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/access/Ownable.sol";
 
 contract AllowaDraw is Ownable {
     
-    address payable owner;
+    mapping(address => uint) public allowance;
+    
+    address ownerallow;
     
     constructor() {
-        owner = msg.sender;
-         allowance[owner] = 1000;
+        ownerallow = msg.sender;
     }
-    
-    mapping(address => uint) public allowance;
     
      modifier ownerOrAllowed(uint _amount) {
         require(allowance[msg.sender] >= _amount,"You are not authorized");
         _;
     }
     
-
     function getBalance() public view returns(uint) {
       return address(this).balance;
     }
     
     function depositMoney() public payable {
-        
+        allowance[ownerallow] += msg.value;
     }
     
     function giveAllowance(address _who, uint _amount) public onlyOwner {
@@ -37,13 +35,19 @@ contract AllowaDraw is Ownable {
         
     }
     
-   
+   function reduceAllowance(address _who, uint _amount) internal {
+       allowance[_who] -= _amount;
+   }
     
-    function witdrawMoney(address payable _to, uint _amount) public onlyOwner{
+    function witdrawMoney(address payable _to, uint _amount) public ownerOrAllowed(_amount){
+        require(_amount <= address(this).balance , "There are not enough funds on the smart contract");
+        if(msg.sender != ownerallow) {
+            reduceAllowance(msg.sender, _amount);
+        }
         _to.transfer(_amount);
     }
     
-    fallback() external payable {
+    fallback() external {
         depositMoney();
     }
     
