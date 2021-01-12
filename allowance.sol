@@ -37,6 +37,8 @@ contract AllowanceContract is Ownable {
 
 contract AllowaDraw is AllowanceContract {
     
+    event MoneySent(address indexed _beneficiary, uint _amount);
+    event MoneyReceived(address indexed _to, uint _amount);
     
     function depositMoney() public payable {
         allowance[ownerallow] += msg.value;
@@ -49,10 +51,12 @@ contract AllowaDraw is AllowanceContract {
         if(msg.sender != ownerallow) {
             reduceAllowance(msg.sender, _amount);
         }
+        emit MoneySent(_to,_amount);
         _to.transfer(_amount);
     }
     
     fallback() external {
+        emit(msg.sender, msg.value);
         depositMoney();
     }
     
