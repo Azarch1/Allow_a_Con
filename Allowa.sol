@@ -17,6 +17,7 @@ contract AllowaDraw is Ownable {
         ownerallow = msg.sender;
     }
     
+    // Ensuring that the user cannot withdraw more than their invoked allowance. 
      modifier ownerOrAllowed(uint _amount) {
         require(allowance[msg.sender] >= _amount,"You are not authorized");
         _;
@@ -32,6 +33,7 @@ contract AllowaDraw is Ownable {
         
     }
     
+    // Ensuring that the invoked allowance is reduced after every withdrawal to prevent double spending.
    function reduceAllowance(address _who, uint _amount) internal {
        emit AllowanceChanged(_who,msg.sender,allowance[_who], allowance[_who] - allowance[_who].sub(_amount));
        allowance[_who] = allowance[_who].sub(_amount);

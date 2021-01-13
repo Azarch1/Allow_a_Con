@@ -13,6 +13,7 @@ contract AllowaContract is AllowaDraw {
         allowance[ownerallow].add(msg.value);
     }
     
+    // overriding the renounceOwnership function that can be found in the openzeppelin Owner.sol smart contract.
     function renounceOwnership() public override {
         revert("Can't renounce ownership here!");
     }
