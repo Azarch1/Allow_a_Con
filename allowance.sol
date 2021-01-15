@@ -18,6 +18,7 @@ contract AllowaContract is AllowaDraw {
         revert("Can't renounce ownership here!");
     }
     
+    // ensures that the owner's actuall allowance value does not decrease
     function witdrawMoney(address payable _to, uint _amount) public ownerOrAllowed(_amount){
         require(_amount <= address(this).balance , "There are not enough funds on the smart contract");
         if(msg.sender != ownerallow) {
@@ -27,6 +28,7 @@ contract AllowaContract is AllowaDraw {
         _to.transfer(_amount);
     }
     
+    // fallback function that accepts deposits if a function name is not specified
     fallback() payable external {
         depositMoney();
         emit MoneyReceived(msg.sender,msg.value);
